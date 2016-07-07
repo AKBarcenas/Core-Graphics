@@ -44,6 +44,18 @@ class ViewController: UIViewController {
         case 0:
             drawRectangle()
             
+        case 1:
+            drawCircle()
+            
+        case 2:
+            drawCheckerboard()
+            
+        case 3:
+            drawRotatedSquares()
+            
+        case 4:
+            drawLines()
+            
         default:
             break
         }
@@ -68,6 +80,131 @@ class ViewController: UIViewController {
         
         CGContextAddRect(context, rectangle)
         CGContextDrawPath(context, .FillStroke)
+        
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        imageView.image = img
+    }
+    
+    /*
+     * Function Name: drawCircle
+     * Parameters: None
+     * Purpose: This method draws a circle and converts it into an image to display in the image view.
+     * Return Value: None
+     */
+    
+    func drawCircle() {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 512, height: 512), false, 0)
+        let context = UIGraphicsGetCurrentContext()
+        let rectangle = CGRect(x: 5, y: 5, width: 502, height: 502)
+        
+        CGContextSetFillColorWithColor(context, UIColor.redColor().CGColor)
+        CGContextSetStrokeColorWithColor(context, UIColor.blackColor().CGColor)
+        CGContextSetLineWidth(context, 10)
+        
+        CGContextAddEllipseInRect(context, rectangle)
+        CGContextDrawPath(context, .FillStroke)
+        
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        imageView.image = img
+    }
+    
+    /*
+     * Function Name: drawCheckerboard
+     * Parameters: None
+     * Purpose: This method draws a checkerboard and converts it into an image to display in the image view.
+     * Return Value: None
+     */
+    
+    func drawCheckerboard() {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 512, height: 512), false, 0)
+        let context = UIGraphicsGetCurrentContext()
+        
+        CGContextSetFillColorWithColor(context, UIColor.blackColor().CGColor)
+        
+        for row in 0 ..< 8 {
+            for col in 0 ..< 8 {
+                if row % 2 == 0 {
+                    if col % 2 == 0 {
+                        CGContextFillRect(context, CGRect(x: col * 64, y: row * 64, width: 64, height: 64))
+                    }
+                } else {
+                    if col % 2 == 1 {
+                        CGContextFillRect(context, CGRect(x: col * 64, y: row * 64, width: 64, height: 64))
+                    }
+                }
+                
+            }
+        }
+        
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        imageView.image = img
+    }
+    
+    /*
+     * Function Name: drawRotatedSquares
+     * Parameters: None
+     * Purpose: This method draws rotated squares and converts it into an image to display in the image view.
+     * Return Value: None
+     */
+    
+    func drawRotatedSquares() {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 512, height: 512), false, 0)
+        let context = UIGraphicsGetCurrentContext()
+        CGContextTranslateCTM(context, 256, 256)
+        
+        let rotations = 16
+        let amount = M_PI_2 / Double(rotations)
+        
+        for _ in 0 ..< rotations {
+            CGContextRotateCTM(context, CGFloat(amount))
+            CGContextAddRect(context, CGRect(x: -128, y: -128, width: 256, height: 256))
+        }
+        
+        CGContextSetStrokeColorWithColor(context, UIColor.blackColor().CGColor)
+        CGContextStrokePath(context)
+        
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        imageView.image = img
+    }
+    
+    /*
+     * Function Name: drawRotatedSquares
+     * Parameters: None
+     * Purpose: This method draws lines and converts it into an image to display in the image view.
+     * Return Value: None
+     */
+    
+    func drawLines() {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 512, height: 512), false, 0)
+        let context = UIGraphicsGetCurrentContext()
+        CGContextTranslateCTM(context, 256, 256)
+        
+        var first = true
+        var length: CGFloat = 256
+        
+        for _ in 0 ..< 256 {
+            CGContextRotateCTM(context, CGFloat(M_PI_2))
+            
+            if first {
+                CGContextMoveToPoint(context, length, 50)
+                first = false
+            } else {
+                CGContextAddLineToPoint(context, length, 50)
+            }
+            
+            length *= 0.99
+        }
+        
+        CGContextSetStrokeColorWithColor(context, UIColor.blackColor().CGColor)
+        CGContextStrokePath(context)
         
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
