@@ -14,6 +14,13 @@ class ViewController: UIViewController {
     // The current drawing type that will be used.
     var currentDrawType = 0
 
+    /*
+     * Function Name: viewDidLoad
+     * Parameters: None
+     * Purpose: This method starts the sequence of drawing by drawing a rectangle.
+     * Return Value: None
+     */
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,6 +62,9 @@ class ViewController: UIViewController {
             
         case 4:
             drawLines()
+            
+        case 5:
+            drawImagesAndText()
             
         default:
             break
@@ -209,6 +219,40 @@ class ViewController: UIViewController {
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
+        imageView.image = img
+    }
+    
+    /*
+     * Function Name: drawImagesAndText
+     * Parameters: None
+     * Purpose: This method places and image and string onto the screen to display in the image view.
+     * Return Value: None
+     */
+    
+    func drawImagesAndText() {
+        // 1
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 512, height: 512), false, 0)
+        
+        // 2
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .Center
+        
+        // 3
+        let attrs = [NSFontAttributeName: UIFont(name: "HelveticaNeue-Thin", size: 36)!, NSParagraphStyleAttributeName: paragraphStyle]
+        
+        // 4
+        let string = "The best-laid schemes o'\nmice an' men gang aft agley"
+        string.drawWithRect(CGRect(x: 32, y: 32, width: 448, height: 448), options: .UsesLineFragmentOrigin, attributes: attrs, context: nil)
+        
+        // 5
+        let mouse = UIImage(named: "mouse")
+        mouse?.drawAtPoint(CGPoint(x: 300, y: 150))
+        
+        // 6
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        // 7
         imageView.image = img
     }
 
